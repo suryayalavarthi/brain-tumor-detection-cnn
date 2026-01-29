@@ -11,7 +11,8 @@ data/
 *.keras
 training_history.json
 visuals/Figure_1.png
-brain_tumor_model.keras
 dataset/
 .venv/
 *.h5
+brain_tumor_model.keras
+*.keras

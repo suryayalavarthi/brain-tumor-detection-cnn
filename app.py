@@ -13,6 +13,10 @@ import tensorflow as tf
 from model import build_model
 
 MODEL_PATH = Path("brain_tumor_model.keras")
+MODEL_URL = (
+    "https://github.com/suryayalavarthi/brain-tumor-detection-cnn/"
+    "releases/latest/download/brain_tumor_model.keras"
+)
 CLASS_NAMES = ["glioma", "meningioma", "notumor", "pituitary"]
 IMAGE_SIZE: Tuple[int, int] = (224, 224)
 
@@ -108,13 +112,34 @@ def _label_badge(label: str) -> str:
 def _load_model() -> tf.keras.Model:
     """Load trained weights into the architecture for Grad-CAM stability."""
     if not MODEL_PATH.exists():
-        raise FileNotFoundError(
-            f"Model file not found at {MODEL_PATH.resolve()}"
-        )
+        _download_model()
     saved_model = tf.keras.models.load_model(str(MODEL_PATH), compile=False)
     model = build_model()
     model.set_weights(saved_model.get_weights())
     return model
+
+
+def _download_model() -> None:
+    """Download the model file from GitHub Releases."""
+    import urllib.request
+
+    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with st.spinner("Downloading model weights..."):
+        with urllib.request.urlopen(MODEL_URL) as response:
+            total = int(response.headers.get("Content-Length", "0"))
+            progress = st.progress(0)
+            downloaded = 0
+            chunk_size = 1024 * 1024
+            with open(MODEL_PATH, "wb") as f:
+                while True:
+                    chunk = response.read(chunk_size)
+                    if not chunk:
+                        break
+                    f.write(chunk)
+                    if total > 0:
+                        downloaded += len(chunk)
+                        progress.progress(min(downloaded / total, 1.0))
+            progress.progress(1.0)
 
 
 def main() -> None:
