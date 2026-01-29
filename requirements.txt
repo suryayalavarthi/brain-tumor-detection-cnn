@@ -1,0 +1,13 @@
+# Deep Learning
+tensorflow==2.20.0
+
+# Image Processing
+opencv-python==4.13.0.90
+
+# Data Science Core
+numpy==2.4.1
+scikit-learn==1.8.0
+
+# Visualization
+matplotlib==3.10.8
+seaborn==0.13.2

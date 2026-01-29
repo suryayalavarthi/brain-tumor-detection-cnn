@@ -1,0 +1,4 @@
+brain_tumor_model.keras
+dataset/
+.venv/
+*.h5
