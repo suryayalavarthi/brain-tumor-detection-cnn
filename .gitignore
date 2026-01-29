@@ -1,3 +1,16 @@
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
+env/
+venv/
+.env
+.env.*
+data/
+*.h5
+*.keras
+training_history.json
+visuals/Figure_1.png
 brain_tumor_model.keras
 dataset/
 .venv/

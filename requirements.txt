@@ -11,3 +11,6 @@ scikit-learn==1.8.0
 # Visualization
 matplotlib==3.10.8
 seaborn==0.13.2
+
+# App Framework
+streamlit==1.37.0

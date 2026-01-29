@@ -5,6 +5,10 @@ Achieved 85% validation accuracy on a four-class Brain Tumor MRI dataset using a
 Built and validated a lightweight, production‑ready pipeline with clear training, evaluation, and inference steps.
 Model is ready for deployment workflows with standardized preprocessing and reproducible metrics.
 
+## Live Demo
+**Streamlit App:** _Coming soon_  
+Replace this line with your deployed URL (e.g., Streamlit Cloud or Hugging Face Spaces).
+
 ## The Problem (Clinical Context)
 Manual MRI interpretation is high‑stakes work that is vulnerable to fatigue, cognitive overload, and variability in human error rates across long reading sessions. In neuro‑oncology, delays or inconsistencies in tumor identification can meaningfully impact patient outcomes.  
 An automated classifier does not replace a radiologist, but it can act as a decision‑support layer—prioritizing cases, highlighting likely tumor classes, and reducing time‑to‑review. The goal is earlier, more consistent detection and a more efficient diagnostic workflow.
@@ -58,6 +62,11 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+Run the Streamlit app locally:
+```
+streamlit run app.py
+```
+
 Train + evaluate (default):
 ```
 python run_pipeline.py --epochs 10 --max-steps 100 --max-val-steps 50
@@ -71,12 +80,14 @@ python explain.py --image "path/to/mri.jpg" --model "brain_tumor_model.keras"
 ## Project Structure
 ```
 .
+├── app.py              # Streamlit UI
 ├── data_loader.py      # Data loading and augmentation
 ├── model.py            # CNN architecture + compile
 ├── train.py            # Training workflow
 ├── evaluate.py         # Evaluation metrics + confusion matrix
 ├── explain.py          # Grad‑CAM explainability
 ├── run_pipeline.py     # End‑to‑end training + evaluation
+├── visuals/            # Generated images for README
 ├── README.md
 └── requirements.txt
 ```
