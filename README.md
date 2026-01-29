@@ -6,8 +6,7 @@ Built and validated a lightweight, production‑ready pipeline with clear traini
 Model is ready for deployment workflows with standardized preprocessing and reproducible metrics.
 
 ## Live Demo
-**Streamlit App:** _Coming soon_  
-Replace this line with your deployed URL (e.g., Streamlit Cloud or Hugging Face Spaces).
+**Streamlit App:** https://brain-tumor-identification.streamlit.app
 
 ## The Problem (Clinical Context)
 Manual MRI interpretation is high‑stakes work that is vulnerable to fatigue, cognitive overload, and variability in human error rates across long reading sessions. In neuro‑oncology, delays or inconsistencies in tumor identification can meaningfully impact patient outcomes.  
