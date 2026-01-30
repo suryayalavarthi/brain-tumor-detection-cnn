@@ -15,7 +15,7 @@ from model import build_model
 MODEL_PATH = Path("brain_tumor_model.keras")
 MODEL_URL = (
     "https://github.com/suryayalavarthi/brain-tumor-detection-cnn/"
-    "releases/latest/download/brain_tumor_model.keras"
+    "releases/download/v1.0/brain_tumor_model.keras"
 )
 CLASS_NAMES = ["glioma", "meningioma", "notumor", "pituitary"]
 IMAGE_SIZE: Tuple[int, int] = (224, 224)
