@@ -111,35 +111,60 @@ def _label_badge(label: str) -> str:
 @st.cache_resource(show_spinner=False)
 def _load_model() -> tf.keras.Model:
     """Load trained weights into the architecture for Grad-CAM stability."""
-    if not MODEL_PATH.exists():
-        _download_model()
+    _ensure_model()
     saved_model = tf.keras.models.load_model(str(MODEL_PATH), compile=False)
     model = build_model()
     model.set_weights(saved_model.get_weights())
     return model
 
 
+def _ensure_model() -> None:
+    """Ensure the model file exists locally; download if missing."""
+    if MODEL_PATH.exists() and MODEL_PATH.stat().st_size > 0:
+        return
+    _download_model()
+    if not MODEL_PATH.exists() or MODEL_PATH.stat().st_size == 0:
+        raise FileNotFoundError(
+            "Model file not found after download. "
+            f"Expected at: {MODEL_PATH.resolve()}"
+        )
+
+
 def _download_model() -> None:
     """Download the model file from GitHub Releases."""
     import urllib.request
+    import urllib.error
 
     MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
     with st.spinner("Downloading model weights..."):
-        with urllib.request.urlopen(MODEL_URL) as response:
-            total = int(response.headers.get("Content-Length", "0"))
-            progress = st.progress(0)
-            downloaded = 0
-            chunk_size = 1024 * 1024
-            with open(MODEL_PATH, "wb") as f:
-                while True:
-                    chunk = response.read(chunk_size)
-                    if not chunk:
-                        break
-                    f.write(chunk)
-                    if total > 0:
-                        downloaded += len(chunk)
-                        progress.progress(min(downloaded / total, 1.0))
-            progress.progress(1.0)
+        tmp_path = MODEL_PATH.with_suffix(".keras.tmp")
+        try:
+            with urllib.request.urlopen(MODEL_URL, timeout=60) as response:
+                total = int(response.headers.get("Content-Length", "0"))
+                progress = st.progress(0)
+                downloaded = 0
+                chunk_size = 1024 * 1024
+                with open(tmp_path, "wb") as f:
+                    while True:
+                        chunk = response.read(chunk_size)
+                        if not chunk:
+                            break
+                        f.write(chunk)
+                        if total > 0:
+                            downloaded += len(chunk)
+                            progress.progress(min(downloaded / total, 1.0))
+                progress.progress(1.0)
+            tmp_path.replace(MODEL_PATH)
+        except urllib.error.HTTPError as exc:
+            raise RuntimeError(
+                "Failed to download model. "
+                f"HTTP {exc.code} from {MODEL_URL}"
+            ) from exc
+        except Exception as exc:
+            raise RuntimeError(
+                "Failed to download model from release URL. "
+                f"URL: {MODEL_URL}"
+            ) from exc
 
 
 def main() -> None:
